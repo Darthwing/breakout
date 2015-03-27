@@ -63,7 +63,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ball.physicsBody?.friction = 0
         ball.physicsBody?.linearDamping = 0
         ball.physicsBody?.restitution = 1
-        ball.physicsBody?.applyImpulse(CGVectorMake(0, 100))
+        ball.physicsBody?.velocity = CGVectorMake(0, 0)
+        ball.physicsBody?.applyForce(CGVectorMake(0, 100))
         ball.zPosition = 11
         
         self.addChild(ball)
