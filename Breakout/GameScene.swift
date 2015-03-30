@@ -27,11 +27,11 @@ var wall3 = SKSpriteNode()
 var wall4 = SKSpriteNode()
 var ground = SKSpriteNode()
 var groundTexture = SKTexture(imageNamed: "ground.png")
-var brickLook = 0
-var brickLook2 = 0
-var brickLook3 = 0
-var brickLook4 = 0
-var brickLook5 = 0
+
+var score = SKLabelNode()
+var scoreNum = 0
+
+var begin = 0
 
 let ballGroup:UInt32 = 1
 let wallGroup:UInt32 = 2
@@ -42,6 +42,7 @@ let brickGroup3:UInt32 = 6
 let brickGroup4:UInt32 = 7
 let brickGroup5:UInt32 = 8
 let roofGroup:UInt32 = 9
+let paddleGroup:UInt32 = 10
 
 
 
@@ -51,21 +52,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.gravity = CGVectorMake(0, 0)
         self.physicsWorld.contactDelegate = self
         
-        //  _________________________________________________________
+        
+//        ___________________________________________________________
+//        MARK: lable
+        
+        
+        score.text = "\(scoreNum)"
+        score.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMaxY(self.frame)-50)
+        score.color = SKColor.whiteColor()
+        score.fontSize = 70
+        score.fontName = "Baskerville"
+        self.addChild(score)
+        
+//          _________________________________________________________
 //        MARK: Ball
         ball = SKSpriteNode(texture: ballTexture)
         ball.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(5, 5))
         ball.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMinY(self.frame)+100)
-        ball.physicsBody?.dynamic = true
+        ball.physicsBody!.dynamic = true
         ball.physicsBody?.categoryBitMask = ballGroup
-        ball.physicsBody?.contactTestBitMask = wallGroup
-        ball.physicsBody?.collisionBitMask = groundGroup
+        ball.physicsBody?.contactTestBitMask = brickGroup
+        ball.physicsBody?.collisionBitMask = ballGroup
         ball.physicsBody?.friction = 0
         ball.physicsBody?.linearDamping = 0
         ball.physicsBody?.restitution = 1
+        ball.physicsBody?.mass = 5
         ball.physicsBody?.velocity = CGVectorMake(0, 0)
-        ball.physicsBody?.applyForce(CGVectorMake(0, 100))
         ball.zPosition = 11
+        ball.physicsBody?.allowsRotation = false
         
         self.addChild(ball)
 //  ______________________________________________________
@@ -86,7 +100,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             brick2.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(42, 16))
             brick2.physicsBody?.dynamic = false
             brick2.physicsBody?.categoryBitMask = brickGroup2
-            brick2.physicsBody?.collisionBitMask = brickGroup
+            brick2.physicsBody?.collisionBitMask = brickGroup2
             brick2.physicsBody?.contactTestBitMask = ballGroup
 
         
@@ -96,7 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             brick3.physicsBody?.dynamic = false
             brick3.zPosition = 10
             brick3.physicsBody?.categoryBitMask = brickGroup3
-            brick3.physicsBody?.collisionBitMask = brickGroup
+            brick3.physicsBody?.collisionBitMask = brickGroup3
             brick3.physicsBody?.contactTestBitMask = ballGroup
         
 
@@ -106,21 +120,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             brick4.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(42, 16))
             brick4.physicsBody?.dynamic = false
             brick4.physicsBody?.categoryBitMask = brickGroup4
-            brick4.physicsBody?.collisionBitMask = brickGroup
+            brick4.physicsBody?.collisionBitMask = brickGroup4
             brick4.physicsBody?.contactTestBitMask = ballGroup
         
         brick5 = SKSpriteNode(texture: brickTexture)
             brick5.position = CGPoint(x: CGRectGetMidX(self.frame)+160, y: CGRectGetMaxY(self.frame)-100)
             brick5.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(42, 16))
             brick5.physicsBody?.dynamic = false
-            brick5.physicsBody?.categoryBitMask = brickGroup4
-            brick5.physicsBody?.collisionBitMask = brickGroup
+            brick5.physicsBody?.categoryBitMask = brickGroup5
+            brick5.physicsBody?.collisionBitMask = brickGroup5
             brick5.physicsBody?.contactTestBitMask = ballGroup
-//        self.addChild(brick)
-//        self.addChild(brick2)
-//        self.addChild(brick3)
-//        self.addChild(brick4)
-//        self.addChild(brick5)
+        self.addChild(brick)
+        self.addChild(brick2)
+        self.addChild(brick3)
+        self.addChild(brick4)
+        self.addChild(brick5)
 
 //    _____________________________________________________________________
 //        MARK: Paddle
@@ -132,7 +146,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         paddle.physicsBody?.dynamic = false
         paddle.physicsBody?.categoryBitMask = wallGroup
         paddle.physicsBody?.contactTestBitMask = ballGroup
+        paddle.physicsBody?.collisionBitMask = paddleGroup
         self.addChild(paddle)
+        
 //        ___________________________________________________________________
 //        MARK: Roof
         
@@ -206,20 +222,84 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBeginContact(contact: SKPhysicsContact) {
     println(contact.bodyA.categoryBitMask)
     println(contact.bodyB.categoryBitMask)
-    brick3.texture = brokenBrickTexture
+    
+        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 6{
+            if brick3.texture == brickTexture {
+            brick3.texture = brokenBrickTexture}
+            else {brick3.removeFromParent()}
+            scoreNum++}
+        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 5{
+            if brick2.texture == brickTexture {
+                brick2.texture = brokenBrickTexture}
+            else {brick2.removeFromParent()}
+            scoreNum++}
+        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 4{
+            if brick.texture == brickTexture {
+                brick.texture = brokenBrickTexture}
+            else {brick.removeFromParent()}
+            scoreNum++}
+        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 7{
+            if brick4.texture == brickTexture {
+                brick4.texture = brokenBrickTexture}
+            else {brick4.removeFromParent()}
+            scoreNum++}
+        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 8{
+            if brick5.texture == brickTexture {
+                brick5.texture = brokenBrickTexture}
+            else {brick5.removeFromParent()}
+            scoreNum++}
     
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
+        if begin == 0
+        { ball.physicsBody!.applyImpulse(CGVectorMake(1000, 2500))
+            begin++}
         
-//        for touch: AnyObject in touches {
-//            let location = touch.locationInNode(self)
         
+        for touch: AnyObject in touches {
+            var location = touch.locationInNode(self)
+            println(location)
+            paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)
             
         
-//                }
+                }
     }
+    
+    
+    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+        for touch: AnyObject in touches {
+            var location = touch.locationInNode(self)
+            paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)
+            
+            println(location)
+            
+            
+            
+        }
+
+    }
+    
+    
+    override func touchesEnded (touches: NSSet, withEvent event: UIEvent) {
+        /* Called when a touch begins */
+        
+        
+        for touch: AnyObject in touches {
+            var location = touch.locationInNode(self)
+            paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)
+
+            println(location)
+            
+            
+                        
+        }
+    }
+
+    
+    
+    
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
