@@ -32,17 +32,26 @@ var score = SKLabelNode()
 var scoreNum = 0
 
 var begin = 0
+var angle = arc4random_uniform(6)
+var start: CGVector = CGVector(dx: 2000, dy: 1500)
+var start2: CGVector = CGVector(dx: 1500, dy: 1500)
+var start3: CGVector = CGVector(dx: 1500, dy: 1200)
+var start4: CGVector = CGVector(dx: -2000, dy: 1500)
+var start5: CGVector = CGVector(dx: -1500, dy: 1500)
+var start6: CGVector = CGVector(dx: -1500, dy: 1200)
 
-let ballGroup:UInt32 = 1
-let wallGroup:UInt32 = 2
-let groundGroup:UInt32 = 3
-let brickGroup:UInt32 = 4
-let brickGroup2:UInt32 = 5
-let brickGroup3:UInt32 = 6
-let brickGroup4:UInt32 = 7
-let brickGroup5:UInt32 = 8
-let roofGroup:UInt32 = 9
-let paddleGroup:UInt32 = 10
+
+
+let wallGroup:UInt32 = 1
+let ballGroup:UInt32 = 3
+let groundGroup:UInt32 = 4
+let brickGroup:UInt32 = 7
+let brickGroup2:UInt32 = 9
+let brickGroup3:UInt32 = 11
+let brickGroup4:UInt32 = 13
+let brickGroup5:UInt32 = 15
+let roofGroup:UInt32 = 17
+let paddleGroup:UInt32 = 19
 
 
 
@@ -53,16 +62,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         
         
-//        ___________________________________________________________
-//        MARK: lable
-        
-        
-        score.text = "\(scoreNum)"
-        score.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMaxY(self.frame)-50)
-        score.color = SKColor.whiteColor()
-        score.fontSize = 70
-        score.fontName = "Baskerville"
-        self.addChild(score)
         
 //          _________________________________________________________
 //        MARK: Ball
@@ -90,8 +89,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             brick.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(42, 16))
             brick.physicsBody?.dynamic = false
             brick.physicsBody?.categoryBitMask = brickGroup
-            brick.physicsBody?.collisionBitMask = brickGroup
-            brick.physicsBody?.contactTestBitMask = ballGroup
+            brick.physicsBody?.collisionBitMask = ballGroup
+            brick.physicsBody?.contactTestBitMask = brickGroup
         
 
         
@@ -100,18 +99,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             brick2.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(42, 16))
             brick2.physicsBody?.dynamic = false
             brick2.physicsBody?.categoryBitMask = brickGroup2
-            brick2.physicsBody?.collisionBitMask = brickGroup2
-            brick2.physicsBody?.contactTestBitMask = ballGroup
+            brick2.physicsBody?.collisionBitMask = ballGroup
+            brick2.physicsBody?.contactTestBitMask = brickGroup2
 
         
         brick3 = SKSpriteNode(texture: brickTexture)
             brick3.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMaxY(self.frame)-100)
             brick3.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(42, 16))
             brick3.physicsBody?.dynamic = false
-            brick3.zPosition = 10
             brick3.physicsBody?.categoryBitMask = brickGroup3
-            brick3.physicsBody?.collisionBitMask = brickGroup3
-            brick3.physicsBody?.contactTestBitMask = ballGroup
+            brick3.physicsBody?.collisionBitMask = ballGroup
+            brick3.physicsBody?.contactTestBitMask = brickGroup3
         
 
         
@@ -120,16 +118,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             brick4.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(42, 16))
             brick4.physicsBody?.dynamic = false
             brick4.physicsBody?.categoryBitMask = brickGroup4
-            brick4.physicsBody?.collisionBitMask = brickGroup4
-            brick4.physicsBody?.contactTestBitMask = ballGroup
+            brick4.physicsBody?.collisionBitMask = ballGroup
+            brick4.physicsBody?.contactTestBitMask = brickGroup4
         
         brick5 = SKSpriteNode(texture: brickTexture)
             brick5.position = CGPoint(x: CGRectGetMidX(self.frame)+160, y: CGRectGetMaxY(self.frame)-100)
             brick5.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(42, 16))
             brick5.physicsBody?.dynamic = false
             brick5.physicsBody?.categoryBitMask = brickGroup5
-            brick5.physicsBody?.collisionBitMask = brickGroup5
-            brick5.physicsBody?.contactTestBitMask = ballGroup
+            brick5.physicsBody?.collisionBitMask = ballGroup
+            brick5.physicsBody?.contactTestBitMask = brickGroup5
         self.addChild(brick)
         self.addChild(brick2)
         self.addChild(brick3)
@@ -171,7 +169,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         wall.physicsBody?.dynamic = false
         wall.physicsBody?.categoryBitMask = wallGroup
         wall.physicsBody?.contactTestBitMask = ballGroup
-        wall.physicsBody?.collisionBitMask = wallGroup
+        wall.physicsBody?.collisionBitMask = ballGroup
 
         
         wall2 = SKSpriteNode(texture: wallTexture)
@@ -180,7 +178,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         wall2.physicsBody?.dynamic = false
         wall2.physicsBody?.categoryBitMask = wallGroup
         wall2.physicsBody?.contactTestBitMask = ballGroup
-        wall2.physicsBody?.collisionBitMask = wallGroup
+        wall2.physicsBody?.collisionBitMask = ballGroup
         wall2.physicsBody?.friction = 0
         
         wall3 = SKSpriteNode(texture: wallTexture)
@@ -189,7 +187,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         wall3.physicsBody?.dynamic = false
         wall3.physicsBody?.categoryBitMask = wallGroup
         wall3.physicsBody?.contactTestBitMask = ballGroup
-        wall3.physicsBody?.collisionBitMask = wallGroup
+        wall3.physicsBody?.collisionBitMask = ballGroup
         
         wall4 = SKSpriteNode(texture: wallTexture)
         wall4.position = CGPoint(x: CGRectGetMaxX(self.frame)-250, y: CGRectGetMinY(self.frame)+65)
@@ -197,7 +195,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         wall4.physicsBody?.dynamic = false
         wall4.physicsBody?.categoryBitMask = wallGroup
         wall4.physicsBody?.contactTestBitMask = ballGroup
-        wall4.physicsBody?.collisionBitMask = wallGroup
+        wall4.physicsBody?.collisionBitMask = ballGroup
         
         ground = SKSpriteNode(texture: groundTexture)
         ground.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMinY(self.frame))
@@ -205,7 +203,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ground.physicsBody?.dynamic = false
         ground.physicsBody?.categoryBitMask = groundGroup
         ground.physicsBody?.contactTestBitMask = ballGroup
-        ground.physicsBody?.collisionBitMask = ballGroup
+        ground.physicsBody?.collisionBitMask = groundGroup
         ground.physicsBody?.friction = 0
         
         self.addChild(wall)
@@ -215,6 +213,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(ground)
         
 
+        
          }
     
     
@@ -223,39 +222,80 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     println(contact.bodyA.categoryBitMask)
     println(contact.bodyB.categoryBitMask)
     
-        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 6{
-            if brick3.texture == brickTexture {
-            brick3.texture = brokenBrickTexture}
-            else {brick3.removeFromParent()}
-            scoreNum++}
-        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 5{
-            if brick2.texture == brickTexture {
-                brick2.texture = brokenBrickTexture}
-            else {brick2.removeFromParent()}
-            scoreNum++}
-        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 4{
+        if contact.bodyA.categoryBitMask == ballGroup && contact.bodyB.categoryBitMask == brickGroup{
             if brick.texture == brickTexture {
-                brick.texture = brokenBrickTexture}
-            else {brick.removeFromParent()}
-            scoreNum++}
-        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 7{
+            brick.texture = brokenBrickTexture
+                scoreNum++
+                scoreLabel()}
+            else {brick.removeFromParent()
+                scoreNum++
+                scoreLabel()}}
+        if contact.bodyA.categoryBitMask == ballGroup && contact.bodyB.categoryBitMask == brickGroup2{
+            if brick2.texture == brickTexture {
+                brick2.texture = brokenBrickTexture
+                scoreNum++
+                scoreLabel()}
+            else {brick2.removeFromParent()
+                scoreNum++
+                scoreLabel()}}
+        if contact.bodyA.categoryBitMask == ballGroup && contact.bodyB.categoryBitMask == brickGroup3{
+            if brick3.texture == brickTexture {
+                brick3.texture = brokenBrickTexture
+                scoreNum++
+                scoreLabel()
+                }
+            else {brick3.removeFromParent()
+                scoreNum++
+                scoreLabel()}}
+        if contact.bodyA.categoryBitMask == ballGroup && contact.bodyB.categoryBitMask == brickGroup4{
             if brick4.texture == brickTexture {
-                brick4.texture = brokenBrickTexture}
-            else {brick4.removeFromParent()}
-            scoreNum++}
-        if contact.bodyA.categoryBitMask == 1 && contact.bodyB.categoryBitMask == 8{
+                brick4.texture = brokenBrickTexture
+                scoreNum++
+                scoreLabel()}
+            else {brick4.removeFromParent()
+                scoreNum++
+                scoreLabel()}}
+        if contact.bodyA.categoryBitMask == ballGroup && contact.bodyB.categoryBitMask == brickGroup5{
             if brick5.texture == brickTexture {
-                brick5.texture = brokenBrickTexture}
-            else {brick5.removeFromParent()}
-            scoreNum++}
+                brick5.texture = brokenBrickTexture
+                scoreNum++
+                scoreLabel()}
+            else {brick5.removeFromParent()
+                scoreNum++
+                scoreLabel()}}
+        if  contact.bodyA.categoryBitMask == ballGroup && contact.bodyB.categoryBitMask == groundGroup{
+        
+            score.removeFromParent()
+            score.text = "You Don Died, Nice Going, your score was \(scoreNum)"
+            score.fontSize = 20
+            self.addChild(score)
+        
+        }
+        
+
     
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        
+        
+        
         /* Called when a touch begins */
         if begin == 0
-        { ball.physicsBody!.applyImpulse(CGVectorMake(1000, 2500))
-            begin++}
+        {
+            if angle == 0{ball.physicsBody?.applyImpulse(start)
+                begin++}
+            if angle == 1{ball.physicsBody?.applyImpulse(start2)
+                begin++}
+            if angle == 2{ball.physicsBody?.applyImpulse(start3)
+                begin++}
+            if angle == 3{ball.physicsBody?.applyImpulse(start4)
+                begin++}
+            if angle == 4{ball.physicsBody?.applyImpulse(start5)
+                begin++}
+            if angle == 5{ball.physicsBody?.applyImpulse(start6)
+                begin++}
+                }
         
         
         for touch: AnyObject in touches {
@@ -272,6 +312,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for touch: AnyObject in touches {
             var location = touch.locationInNode(self)
             paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)
+            if scoreNum == 10{
+                
+                ball.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+                
+                score.removeFromParent()
+                score.fontSize = 15
+                score.text = "You Don Broke out of prison, Good Job, Your score is \(scoreNum)"
+                self.addChild(score)
+            }
+
             
             println(location)
             
@@ -296,7 +346,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         
         }
     }
+    func scoreLabel(){
+    
+        //        ___________________________________________________________
+        //        MARK: lable
+        
+        score.removeFromParent()
+        score.text = "\(scoreNum)"
+        score.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMaxY(self.frame)-50)
+        score.color = SKColor.whiteColor()
+        score.fontSize = 70
+        score.fontName = "Baskerville"
+        self.addChild(score)
 
+    }
     
     
     
