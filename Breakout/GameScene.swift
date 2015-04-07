@@ -75,7 +75,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ball.physicsBody?.friction = 0
         ball.physicsBody?.linearDamping = 0
         ball.physicsBody?.restitution = 1
-        ball.physicsBody?.mass = 5
+        ball.physicsBody?.mass = 0
         ball.physicsBody?.velocity = CGVectorMake(0, 0)
         ball.zPosition = 11
         ball.physicsBody?.allowsRotation = false
@@ -277,31 +277,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        
-        
-        
         /* Called when a touch begins */
-        if begin == 0
-        {
-            if angle == 0{ball.physicsBody?.applyImpulse(start)
-                begin++}
-            if angle == 1{ball.physicsBody?.applyImpulse(start2)
-                begin++}
-            if angle == 2{ball.physicsBody?.applyImpulse(start3)
-                begin++}
-            if angle == 3{ball.physicsBody?.applyImpulse(start4)
-                begin++}
-            if angle == 4{ball.physicsBody?.applyImpulse(start5)
-                begin++}
-            if angle == 5{ball.physicsBody?.applyImpulse(start6)
-                begin++}
-                }
+        
+        
+
         
         
         for touch: AnyObject in touches {
             var location = touch.locationInNode(self)
+            
+            if begin == 0
+                {var Xcord = (location.x - ball.position.x)
+                    var Ycord = (location.y - ball.position.y)
+            
+            
+                    ball.physicsBody?.applyImpulse(CGVector(dx: Xcord, dy: Ycord))
+                    begin++}
+            
+            else{
+            
             println(location)
-            paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)
+                paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)}
             
         
                 }
@@ -311,7 +307,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
             var location = touch.locationInNode(self)
-            paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)
+            if begin >= 2{
+                paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)}
             if scoreNum == 10{
                 
                 ball.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
@@ -319,8 +316,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 score.removeFromParent()
                 score.fontSize = 15
                 score.text = "You Don Broke out of prison, Good Job, Your score is \(scoreNum)"
+                score.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(10, 10))
+                var rotate = SKAction.rotateByAngle(2*3.141592653589793, duration: 0.5)
+                score.runAction(rotate)
                 self.addChild(score)
+                scoreNum++
+               
+                
+                
+                
+                
             }
+         
+            
 
             
             println(location)
@@ -338,7 +346,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         for touch: AnyObject in touches {
             var location = touch.locationInNode(self)
-            paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)
+            if begin >= 2{
+                paddle.position = CGPoint(x: location.x, y: CGRectGetMinY(self.frame)+50)}
+            begin++
 
             println(location)
             
